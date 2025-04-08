@@ -17,6 +17,8 @@ class AuthProvider extends ChangeNotifier {
     _navigationService = GetIt.instance<NavigationService>();
     _databaseService = GetIt.instance<DatabaseService>();
 
+    // _auth.signOut();
+
     _auth.authStateChanges().listen((_user) {
       if (_user != null) {
         _databaseService.updateUserLasSeenTime(_user.uid);
@@ -30,7 +32,16 @@ class AuthProvider extends ChangeNotifier {
             'imageUrl': userData['imageUrl'],
             'lastActive': userData['lastActive'],
           });
+          _navigationService.removeAndavigateToRoute('/home');
         });
+        if (kDebugMode) {
+          print("user is logged in");
+        }
+      } else {
+        _navigationService.removeAndavigateToRoute('/login');
+        if (kDebugMode) {
+          print("user is not logged in");
+        }
       }
     });
   }
@@ -47,6 +58,44 @@ class AuthProvider extends ChangeNotifier {
     } on FirebaseAuthException {
       if (kDebugMode) {
         print('Error occurred while logging in');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  Future<String?> registerUsingEmailAndPassword(
+    String name,
+    String email,
+    String password,
+  ) async {
+    try {
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      if (kDebugMode) {
+        print(userCredential.user);
+      }
+      return userCredential.user?.uid;
+    } on FirebaseAuthException {
+      if (kDebugMode) {
+        print("Error occurred while registering");
+      }
+      return null;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return null;
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await _auth.signOut();
+      if (kDebugMode) {
+        print("User logged out");
       }
     } catch (e) {
       if (kDebugMode) {
