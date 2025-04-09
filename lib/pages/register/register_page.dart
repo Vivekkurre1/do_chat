@@ -1,5 +1,5 @@
 import 'package:do_chat/providers/auth_provider.dart';
-import 'package:do_chat/services/cloud_storage_service.dart';
+import 'package:do_chat/services/cloudinary_service.dart';
 import 'package:do_chat/services/database_service.dart';
 import 'package:do_chat/services/media_service.dart';
 import 'package:do_chat/services/navigation_service.dart';
@@ -24,7 +24,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   late AuthProvider _authProvider;
   late DatabaseService _databaseService;
-  late CloudStorageService _cloudStorageService;
+  // late CloudStorageService _cloudStorage;
+  late CloudinaryStorageService _cloudinaryStorage;
   late NavigationService _navigationService;
   String? _name;
   String? _email;
@@ -40,7 +41,9 @@ class _RegisterPageState extends State<RegisterPage> {
     _deviceWidth = MediaQuery.of(context).size.width;
     _authProvider = Provider.of<AuthProvider>(context);
     _databaseService = GetIt.instance.get<DatabaseService>();
-    _cloudStorageService = GetIt.instance.get<CloudStorageService>();
+    // _cloudStorage = GetIt.instance.get<CloudStorageService>();
+    _cloudinaryStorage = GetIt.instance.get<CloudinaryStorageService>();
+    _navigationService = GetIt.instance.get<NavigationService>();
     return _buildUI();
   }
 
@@ -75,9 +78,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _profileImaeField() {
     return GestureDetector(
       onTap: () async {
-        GetIt.instance.get<MediaService>().pickImageFromLibrary().then((_file) {
+        GetIt.instance.get<MediaService>().pickImageFromLibrary().then((file) {
           setState(() {
-            _profileImage = _file;
+            _profileImage = file;
           });
         });
       },
@@ -157,6 +160,43 @@ class _RegisterPageState extends State<RegisterPage> {
         if (_registerFormKey.currentState!.validate() &&
             _profileImage != null) {
           _registerFormKey.currentState!.save();
+          try {
+            final uid = await _authProvider.registerUsingEmailAndPassword(
+              _email!,
+              _password!,
+            );
+
+            if (uid == null) {
+              throw Exception("Failed to register user.");
+            }
+
+            final imageUrl = await _cloudinaryStorage.saveUserImageToCloudinary(
+              uid,
+              _profileImage!,
+            );
+
+            await _databaseService.createUser(
+              uid,
+              _name!,
+              _email!,
+              imageUrl ?? "",
+            );
+
+            await _authProvider.getDataFromFirebase();
+            // _navigationService.goBack();
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Registration failed: ${e.toString()}")),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Please fill all fields and select a profile image.",
+              ),
+            ),
+          );
         }
       },
     );

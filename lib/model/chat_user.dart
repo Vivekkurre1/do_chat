@@ -15,7 +15,7 @@ class ChatUser {
 
   factory ChatUser.fromJson(Map<String, dynamic> json) {
     return ChatUser(
-      uId: json['uId'],
+      uId: json['uid'],
       name: json['name'],
       email: json['email'],
       imageUrl: json['imageUrl'],
@@ -25,7 +25,7 @@ class ChatUser {
 
   Map<String, dynamic> toJson() {
     return {
-      'uId': uId,
+      'uid': uId,
       'name': name,
       'email': email,
       'imageUrl': imageUrl,

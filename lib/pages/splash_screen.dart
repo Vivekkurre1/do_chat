@@ -1,4 +1,5 @@
 import 'package:do_chat/services/cloud_storage_service.dart';
+import 'package:do_chat/services/cloudinary_service.dart';
 import 'package:do_chat/services/database_service.dart';
 import 'package:do_chat/services/media_service.dart';
 import 'package:do_chat/services/navigation_service.dart';
@@ -41,6 +42,9 @@ class _SplashScreenState extends State<SplashScreen> {
     GetIt.instance.registerSingleton<MediaService>(MediaService());
     GetIt.instance.registerSingleton<CloudStorageService>(
       CloudStorageService(),
+    );
+    GetIt.instance.registerSingleton<CloudinaryStorageService>(
+      CloudinaryStorageService(),
     );
     GetIt.instance.registerSingleton<DatabaseService>(DatabaseService());
   }
