@@ -181,6 +181,11 @@ class _RegisterPageState extends State<RegisterPage> {
               _email!,
               imageUrl ?? "",
             );
+            // await _authProvider.logout();
+            // await _authProvider.loginUsingEmailAndPassword(
+            //   email: _email!,
+            //   password: _password!,
+            // );
 
             await _authProvider.getDataFromFirebase();
             // _navigationService.goBack();

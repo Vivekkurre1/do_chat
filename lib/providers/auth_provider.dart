@@ -21,6 +21,11 @@ class AuthProvider extends ChangeNotifier {
       // _auth.signOut();
       if (_user != null) {
         print("user is logged in");
+        _databaseService.getUser(_user.uid).then((_snapshot) {
+          if (_snapshot.data() != null || _snapshot.data() != false) {
+            _databaseService.updateUserLasSeenTime(_user.uid);
+          }
+        });
         _navigationService.removeAndavigateToRoute('/home');
       } else {
         print("user is not logged in");
@@ -89,7 +94,6 @@ class AuthProvider extends ChangeNotifier {
         }
       });
     }
-    ;
   }
 
   Future<void> loginUsingEmailAndPassword({
@@ -142,6 +146,7 @@ class AuthProvider extends ChangeNotifier {
       if (kDebugMode) {
         print("User logged out");
       }
+      _navigationService.removeAndavigateToRoute('/login');
     } catch (e) {
       if (kDebugMode) {
         print(e);
