@@ -1,3 +1,5 @@
+import 'package:do_chat/pages/home/chats_page.dart';
+import 'package:do_chat/pages/home/users_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,10 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [
-    Container(color: Colors.red, child: const Center(child: Text('Chats'))),
-    Container(color: Colors.green, child: const Center(child: Text('Users'))),
-  ];
+  final List<Widget> _pages = [ChatsPage(), UsersPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildUI() {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Page')),
+      // appBar: AppBar(title: const Text('Home Page')),
       // body: IndexedStack(index: _currentIndex, children: _pages),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
