@@ -1,11 +1,14 @@
 import 'package:do_chat/model/chat.dart';
 import 'package:do_chat/model/chat_message.dart';
 import 'package:do_chat/model/chat_user.dart';
+import 'package:do_chat/pages/chat/chat_page.dart';
 import 'package:do_chat/providers/auth_provider.dart';
 import 'package:do_chat/providers/chat_provider.dart';
+import 'package:do_chat/services/navigation_service.dart';
 import 'package:do_chat/widgets/custom_list_view.dart';
 import 'package:do_chat/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class ChatsPage extends StatefulWidget {
@@ -21,11 +24,13 @@ class _ChatsPageState extends State<ChatsPage> {
 
   late AuthProvider _authProvider;
   late ChatsProvider _chatProvider;
+  late NavigationService _navigation;
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _authProvider = Provider.of<AuthProvider>(context);
+    _navigation = GetIt.instance<NavigationService>();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ChatsProvider>(
@@ -105,13 +110,15 @@ class _ChatsPageState extends State<ChatsPage> {
               : chat.messages.first.content;
     }
     return CustomListViewTileWithActivity(
-      height: _deviceHeight * .10,
+      height: _deviceHeight * 0.10,
       title: chat.chatTitle(),
       subtitle: subTitleText,
       imageUrl: chat.imageURL(),
       isActive: isActive,
       isActivity: chat.activity,
-      onTap: () {},
+      onTap: () {
+        _navigation.navigateToPage(ChatPage(chat: chat));
+      },
     );
   }
 }
