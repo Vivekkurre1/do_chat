@@ -36,4 +36,10 @@ class Chat {
         ? recepients[0].imageUrl
         : "https://res.cloudinary.com/dnjeaojih/image/upload/v1744290873/group_image_zwjsyr.avif";
   }
+
+  String chatTitle() {
+    return !group
+        ? recepients[0].name
+        : recepients.map((user) => user.name).join(", ");
+  }
 }

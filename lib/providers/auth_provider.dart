@@ -17,84 +17,84 @@ class AuthProvider extends ChangeNotifier {
     _navigationService = GetIt.instance<NavigationService>();
     _databaseService = GetIt.instance<DatabaseService>();
 
-    _auth.authStateChanges().listen((_user) {
-      // _auth.signOut();
-      if (_user != null) {
-        print("user is logged in");
-        _databaseService.getUser(_user.uid).then((_snapshot) {
-          if (_snapshot.data() != null || _snapshot.data() != false) {
-            _databaseService.updateUserLasSeenTime(_user.uid);
-          }
-        });
-        _navigationService.removeAndavigateToRoute('/home');
-      } else {
-        print("user is not logged in");
-      }
-    });
+    // _auth.authStateChanges().listen((userData) {
+    //   // _auth.signOut();
+    //   if (userData != null) {
+    //     print("user is logged in");
+    //     _databaseService.getUser(userData.uid).then((snapshot) {
+    //       if (snapshot.data() != null || snapshot.data() != false) {
+    //         _databaseService.updateUserLasSeenTime(userData.uid);
+    //       }
+    //     });
+    //     _navigationService.removeAndavigateToRoute('/home');
+    //   } else {
+    //     print("user is not logged in");
+    //   }
+    // });
 
     // getDataFromFirebase();
 
     // _auth.signOut();
 
-    // _auth.authStateChanges().listen((_user) {
-    //   if (_user != null) {
-    //     _databaseService.updateUserLasSeenTime(_user.uid);
-    //     _databaseService.getUser(_user.uid).then((_snapshot) {
-    //       if (_snapshot.data() != null || _snapshot.data() != false) {
-    //         // Check if data is not null
-    //         Map<String, dynamic> userData =
-    //             _snapshot.data()! as Map<String, dynamic>;
-    //         user = ChatUser.fromJson({
-    //           'uid': _user.uid,
-    //           'name': userData['name'],
-    //           'email': userData['email'],
-    //           'imageUrl': userData['imageUrl'],
-    //           'lastActive': userData['lastActive'],
-    //         });
-    //         _navigationService.removeAndavigateToRoute('/home');
-    //       } else {
-    //         if (kDebugMode) {
-    //           print("User data is null for UID: ${_user.uid}");
-    //         }
-    //         // Handle the case where user data is null
-    //       }
-    //     });
-    //     if (kDebugMode) {
-    //       print("user is logged in");
-    //     }
-    //   } else {
-    //     _navigationService.removeAndavigateToRoute('/login');
-    //     if (kDebugMode) {
-    //       print("user is not logged in");
-    //     }
-    //   }
-    // });
+    _auth.authStateChanges().listen((_user) {
+      if (_user != null) {
+        _databaseService.updateUserLasSeenTime(_user.uid);
+        _databaseService.getUser(_user.uid).then((_snapshot) {
+          if (_snapshot.data() != null || _snapshot.data() != false) {
+            // Check if data is not null
+            Map<String, dynamic> userData =
+                _snapshot.data()! as Map<String, dynamic>;
+            user = ChatUser.fromJson({
+              'uid': _user.uid,
+              'name': userData['name'],
+              'email': userData['email'],
+              'imageUrl': userData['imageUrl'],
+              'lastActive': userData['lastActive'],
+            });
+            _navigationService.removeAndavigateToRoute('/home');
+          } else {
+            if (kDebugMode) {
+              print("User data is null for UID: ${_user.uid}");
+            }
+            // Handle the case where user data is null
+          }
+        });
+        if (kDebugMode) {
+          print("user is logged in");
+        }
+      } else {
+        _navigationService.removeAndavigateToRoute('/login');
+        if (kDebugMode) {
+          print("user is not logged in");
+        }
+      }
+    });
   }
 
-  Future<void> getDataFromFirebase() async {
-    var _user = _auth.currentUser;
-    if (_user != null) {
-      _databaseService.getUser(_user.uid).then((_snapshot) {
-        if (_snapshot.data() != null || _snapshot.data() != false) {
-          // Check if data is not null
-          Map<String, dynamic> userData =
-              _snapshot.data()! as Map<String, dynamic>;
-          user = ChatUser.fromJson({
-            'uid': _user.uid,
-            'name': userData['name'],
-            'email': userData['email'],
-            'imageUrl': userData['imageUrl'],
-            'lastActive': userData['lastActive'],
-          });
-        } else {
-          if (kDebugMode) {
-            print("User data is null for UID: ${_user.uid}");
-          }
-          // Handle the case where user data is null
-        }
-      });
-    }
-  }
+  // Future<void> getDataFromFirebase() async {
+  //   var _user = _auth.currentUser;
+  //   if (_user != null) {
+  //     _databaseService.getUser(_user.uid).then((_snapshot) {
+  //       if (_snapshot.data() != null || _snapshot.data() != false) {
+  //         // Check if data is not null
+  //         Map<String, dynamic> userData =
+  //             _snapshot.data()! as Map<String, dynamic>;
+  //         user = ChatUser.fromJson({
+  //           'uid': _user.uid,
+  //           'name': userData['name'],
+  //           'email': userData['email'],
+  //           'imageUrl': userData['imageUrl'],
+  //           'lastActive': userData['lastActive'],
+  //         });
+  //       } else {
+  //         if (kDebugMode) {
+  //           print("User data is null for UID: ${_user.uid}");
+  //         }
+  //         // Handle the case where user data is null
+  //       }
+  //     });
+  //   }
+  // }
 
   Future<void> loginUsingEmailAndPassword({
     required String email,

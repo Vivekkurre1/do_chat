@@ -187,7 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
             //   password: _password!,
             // );
 
-            await _authProvider.getDataFromFirebase();
+            // await _authProvider.getDataFromFirebase();
             // _navigationService.goBack();
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(

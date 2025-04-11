@@ -32,7 +32,7 @@ class ChatMessage {
       senderId: json["sender_id"],
       type: _messageType,
       content: json["content"],
-      sentTime: json["sent_t ime"].toDate(),
+      sentTime: json["sent_time"].toDate(),
     );
   }
 
