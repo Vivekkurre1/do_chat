@@ -15,7 +15,6 @@ class CustomInputFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return TextFormField(
       onSaved: (_value) => onSaved(_value!),
       cursorColor: Colors.white,

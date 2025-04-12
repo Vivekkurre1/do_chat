@@ -31,6 +31,11 @@ class ChatPageProvider extends ChangeNotifier {
     return _message ?? "";
   }
 
+  set message(String value) {
+    _message = value;
+    notifyListeners();
+  }
+
   ChatPageProvider(this._auth, this._chatId, this._messageListViewController) {
     _db = GetIt.instance.get<DatabaseService>();
     _cloudinary = GetIt.instance.get<CloudinaryStorageService>();
@@ -54,9 +59,16 @@ class ChatPageProvider extends ChangeNotifier {
                   _m.data() as Map<String, dynamic>;
               return ChatMessage.fromJson(_messageData);
             }).toList();
-        messages = _messages;
+        messages = _messages.reversed.toList();
         notifyListeners();
-        // add scroll to bottom call
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_messageListViewController.hasClients) {
+            _messageListViewController.jumpTo(
+              _messageListViewController.position.maxScrollExtent,
+            );
+          }
+        });
       });
     } catch (e) {
       if (kDebugMode) {
@@ -67,13 +79,13 @@ class ChatPageProvider extends ChangeNotifier {
 
   void sendTextMessage() {
     if (_message != null) {
-      ChatMessage _messageToSend = ChatMessage(
+      ChatMessage messageToSend = ChatMessage(
         senderId: _auth.user.uId,
         content: _message!,
         type: MessageType.text,
         sentTime: DateTime.now(),
       );
-      _db.addMessageToChat(_chatId, _messageToSend);
+      _db.addMessageToChat(_chatId, messageToSend);
     }
   }
 

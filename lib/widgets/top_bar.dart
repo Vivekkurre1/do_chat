@@ -51,10 +51,12 @@ class TopBar extends StatelessWidget {
     return Text(
       title,
       overflow: TextOverflow.ellipsis,
+      textScaler: TextScaler.linear(_deviceWidth * 0.05 / fontSize!),
       style: TextStyle(
         fontSize: fontSize ?? 20,
         fontWeight: FontWeight.w700,
         color: Colors.white,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
