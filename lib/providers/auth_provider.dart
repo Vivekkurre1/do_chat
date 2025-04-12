@@ -39,11 +39,11 @@ class AuthProvider extends ChangeNotifier {
     _auth.authStateChanges().listen((_user) {
       if (_user != null) {
         _databaseService.updateUserLasSeenTime(_user.uid);
-        _databaseService.getUser(_user.uid).then((_snapshot) {
-          if (_snapshot.data() != null || _snapshot.data() != false) {
+        _databaseService.getUser(_user.uid).then((snapshot) {
+          if (snapshot.data() != null || snapshot.data() != false) {
             // Check if data is not null
             Map<String, dynamic> userData =
-                _snapshot.data()! as Map<String, dynamic>;
+                snapshot.data()! as Map<String, dynamic>;
             user = ChatUser.fromJson({
               'uid': _user.uid,
               'name': userData['name'],

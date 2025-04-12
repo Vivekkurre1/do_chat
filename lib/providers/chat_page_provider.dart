@@ -9,6 +9,7 @@ import 'package:do_chat/services/navigation_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get_it/get_it.dart';
 
 class ChatPageProvider extends ChangeNotifier {
@@ -24,7 +25,8 @@ class ChatPageProvider extends ChangeNotifier {
   List<ChatMessage>? messages;
 
   late StreamSubscription _messageStream;
-
+  late StreamSubscription _kayboardVisibilityStream;
+  late KeyboardVisibilityController _keyboardVisibilityController;
   String? _message;
 
   String get message {
@@ -41,7 +43,9 @@ class ChatPageProvider extends ChangeNotifier {
     _cloudinary = GetIt.instance.get<CloudinaryStorageService>();
     _mediaService = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
+    _keyboardVisibilityController = KeyboardVisibilityController();
     listenToMessage();
+    listenToKeyBoardChanges();
   }
 
   @override
@@ -75,6 +79,14 @@ class ChatPageProvider extends ChangeNotifier {
         print("Error listening to messages: $e");
       }
     }
+  }
+
+  void listenToKeyBoardChanges() {
+    _kayboardVisibilityStream = _keyboardVisibilityController.onChange.listen((
+      event,
+    ) {
+      _db.updateChat(_chatId, {"is_activity": event});
+    });
   }
 
   void sendTextMessage() {
