@@ -176,7 +176,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _messageTextField() {
     return SizedBox(
       width: _deviceWidth * 0.65,
-      child: CustomInputFields(
+      child: CustomTextFormField(
         onSaved: (value) {
           _chatPageProvider.message = value;
         },

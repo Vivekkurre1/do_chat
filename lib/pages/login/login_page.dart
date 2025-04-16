@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _pageTitle() {
-    return Container(
+    return SizedBox(
       height: _deviceHeight * 0.10,
       child: Text(
         "Do-Chat",
@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginForm() {
-    return Container(
+    return SizedBox(
       height: _deviceHeight * 0.18,
       child: Form(
         key: _loginFormKey,
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomInputFields(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _email = value;
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
               hintText: "Email",
               obscureText: false,
             ),
-            CustomInputFields(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _password = value;
@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _registerAccountLink() {
     return GestureDetector(
       onTap: () => _navigationService.navigateToRoute('/register'),
-      child: Container(
+      child: SizedBox(
         height: _deviceHeight * 0.05,
         child: Text(
           "Don't have an account? Register",

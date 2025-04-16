@@ -104,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _registerForm() {
-    return Container(
+    return SizedBox(
       height: _deviceHeight * 0.22,
       child: Form(
         key: _registerFormKey,
@@ -113,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomInputFields(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _name = value;
@@ -124,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
               regEx: r".{8,}",
             ),
             // SizedBox(height: _deviceHeight * 0.01),
-            CustomInputFields(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _email = value;
@@ -135,7 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
               regEx: r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
             ),
             // SizedBox(height: _deviceHeight * 0.01),
-            CustomInputFields(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _password = value;
@@ -212,7 +212,7 @@ class _RegisterPageState extends State<RegisterPage> {
       onTap: () {
         _navigationService.navigateToRoute('/login');
       },
-      child: Container(
+      child: SizedBox(
         height: _deviceHeight * 0.03,
         child: const Text(
           "Already have an account? Login",
