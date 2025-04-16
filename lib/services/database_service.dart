@@ -37,6 +37,16 @@ class DatabaseService {
     return _db.collection(USER_COLLECTION).doc(uId).get();
   }
 
+  Future<QuerySnapshot> getUsers({String? name}) {
+    Query query = _db.collection(USER_COLLECTION);
+    if (name != null) {
+      query = query
+          .where("name", isGreaterThanOrEqualTo: name)
+          .where("name", isLessThanOrEqualTo: "${name}z");
+    }
+    return query.get();
+  }
+
   Stream<QuerySnapshot> getChatsForUser(String uid) {
     return _db
         .collection(CHAT_COLLECTION)
@@ -90,6 +100,20 @@ class DatabaseService {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  Future<DocumentReference?> createChat(Map<String, dynamic> _data) async {
+    try {
+      DocumentReference _chat = await _db
+          .collection(CHAT_COLLECTION)
+          .add(_data);
+      return _chat;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return null;
     }
   }
 
