@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String? _email;
   String? _password;
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     _deviceWidth = MediaQuery.of(context).size.width;
     _authProvider = Provider.of<AuthProvider>(context);
     _navigationService = GetIt.instance.get<NavigationService>();
+
     return _buildUI();
   }
 
@@ -96,6 +98,12 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: false,
             ),
             CustomTextFormField(
+              suffixOnPressed: () {
+                setState(() {
+                  // Toggle password visibility
+                  _isPasswordVisible = !_isPasswordVisible;
+                });
+              },
               onSaved: (value) {
                 setState(() {
                   _password = value;
@@ -103,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               regEx: r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$",
               hintText: "Password",
-              obscureText: true,
+              obscureText: !_isPasswordVisible,
             ),
           ],
         ),

@@ -5,6 +5,7 @@ class CustomTextFormField extends StatelessWidget {
   final String regEx;
   final String hintText;
   final bool obscureText;
+  final VoidCallback? suffixOnPressed;
 
   const CustomTextFormField({
     super.key,
@@ -12,6 +13,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.regEx,
     required this.hintText,
     required this.obscureText,
+    this.suffixOnPressed,
   });
 
   @override
@@ -25,6 +27,26 @@ class CustomTextFormField extends StatelessWidget {
         return RegExp(regEx).hasMatch(value!) ? null : "Enter a valid value.";
       },
       decoration: InputDecoration(
+        suffix:
+            (suffixOnPressed != null)
+                ? obscureText
+                    ? IconButton(
+                      onPressed: suffixOnPressed,
+                      icon: Icon(
+                        Icons.remove_red_eye,
+                        color: Colors.white54,
+                        size: 20,
+                      ),
+                    )
+                    : IconButton(
+                      onPressed: suffixOnPressed,
+                      icon: Icon(
+                        Icons.visibility_off,
+                        color: Colors.white54,
+                        size: 20,
+                      ),
+                    )
+                : null,
         fillColor: Color.fromRGBO(30, 29, 37, 1.0),
         filled: true,
         border: OutlineInputBorder(

@@ -88,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
         if (_profileImage != null) {
           return RoundedImageFile(
             key: UniqueKey(),
-            image: _profileImage!,
+            image: _profileImage ?? PlatformFile(name: '', size: 0),
             size: _deviceHeight * 0.15,
           );
         } else {
